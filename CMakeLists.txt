@@ -48,6 +48,10 @@ FetchContent_Declare(json
     GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
     GIT_TAG v3.9.1
 )
+FetchContent_Declare(stduuid
+    GIT_REPOSITORY https://github.com/mariusbancila/stduuid.git
+    GIT_TAG        v1.0
+)
 # FetchContent_Declare(hash-library
 #     GIT_REPOSITORY https://github.com/stbrumme/hash-library.git
 #     GIT_TAG        hash_library_v8
@@ -58,6 +62,11 @@ FetchContent_MakeAvailable(abseil-cpp)
 FetchContent_MakeAvailable(backward-cpp)
 FetchContent_MakeAvailable(json)
 #FetchContent_MakeAvailable(hash-library)
+
+FetchContent_Populate(stduuid)
+add_library(stduuid INTERFACE)
+target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
+target_link_libraries(stduuid INTERFACE -luuid)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(gpgme REQUIRED IMPORTED_TARGET gpgme)
@@ -70,4 +79,5 @@ target_include_directories(openmprdb-cli PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 target_link_libraries(openmprdb-cli PRIVATE
     -ldw absl::flags absl::flags_parse absl::str_format
     cpr::cpr PkgConfig::gpgme result nlohmann_json::nlohmann_json
+    stduuid
 )
